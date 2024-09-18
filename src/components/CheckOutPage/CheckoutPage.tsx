@@ -101,7 +101,7 @@ const CheckoutPage: React.FC = () => {
               <Form.Control
                 type="text"
                 name="merchantid"
-                defaultValue="9275444"
+                defaultValue="9256684"
                 required
               />
             </Form.Group>
@@ -111,7 +111,7 @@ const CheckoutPage: React.FC = () => {
               <Form.Control
                 type="text"
                 name="paymentgatewayid"
-                defaultValue="16"
+                defaultValue="471"
                 required
               />
             </Form.Group>
