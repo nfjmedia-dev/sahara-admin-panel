@@ -62,6 +62,7 @@ const CheckoutPage: React.FC = () => {
     try {
       const response = await fetch(actionUrl, {
         method: 'POST',
+        mode: 'no-cors', 
         body: formData,
       });
 
