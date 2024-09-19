@@ -51,26 +51,10 @@ const CheckoutPage: React.FC = () => {
     generateCheckhash();
   }, []);
 
-  // Handle form submission
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const actionUrl = form.getAttribute('action') || '';
-
-    try {
-      const response = await fetch(actionUrl, {
-        method: 'POST',
-        mode: 'no-cors', 
-        body: formData,
-      });
-
-      const responseText = await response.text();
-      console.log('Response:', responseText);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    // Perform any necessary client-side validation or processing
+    // If validation fails, you can prevent submission:
+    // event.preventDefault();
   };
 
   return (
@@ -95,7 +79,7 @@ const CheckoutPage: React.FC = () => {
             id="form1"
             action="https://test.borgun.is/SecurePay/default.aspx"
             method="post"
-            onSubmit={handleSubmit} // Handle form submission
+            onSubmit={handleSubmit}
           >
             <Form.Group className="mb-3" controlId="merchantId">
               <Form.Label>Merchant ID</Form.Label>
