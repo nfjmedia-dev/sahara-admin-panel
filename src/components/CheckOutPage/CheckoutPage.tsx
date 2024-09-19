@@ -1,60 +1,60 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
-interface Product {
-  name: string;
-  description: string;
-  imageUrl: string;
-  quantity: number;
-}
+const CheckoutPage: React.FC = () => {
+  const [checkhash, setCheckhash] = useState<string>('');
 
-interface CheckoutPageProps {
-  product: Product;
-}
+  // Example product details
+  const product = {
+    name: 'Product Name',
+    description: 'This is a product description.',
+    imageUrl: 'https://via.placeholder.com/300',
+    quantity: 1,
+  };
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
-  const [checkhash, setCheckhash] = useState('');
+  // Secret key (do not expose it directly in your code; ideally, use environment variables or secure storage)
+  const secretKey = 'cdedfbb6ecab4a4994ac880144dd92dc';
 
-  const generateCheckhash = async () => {
-    const merchantId = '9256684'; // Replace with your actual merchant ID
-    const returnUrlSuccess = 'https://lobster-app-9rq3t.ondigitalocean.app/payment/success';
-    const returnUrlSuccessServer = 'https://lobster-app-9rq3t.ondigitalocean.app/api/payment/success';
-    const orderId = 'ORDER1230001'; // This should be dynamically generated
+  // Function to generate the checkhash
+  const generateCheckhash = () => {
+    const merchantId = '9256684';
+    const returnUrlSuccess = 'http://borgun.is/ReturnPageSuccess';
+    const returnUrlSuccessServer = 'http://borgun.is/ReturnPageSuccessServer';
+    const orderId = 'ORDER1230001';
     const amount = '800.00';
     const currency = 'ISK';
 
-    try {
-      const response = await fetch('/api/generate-checkhash', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          merchantId,
-          returnUrlSuccess,
-          returnUrlSuccessServer,
-          orderId,
-          amount,
-          currency,
-        }),
-      });
+    const data = `${merchantId}|${returnUrlSuccess}|${returnUrlSuccessServer}|${orderId}|${amount}|${currency}`;
 
-      if (!response.ok) {
-        throw new Error('Failed to generate checkhash');
-      }
+    // Create HMAC SHA256 hash
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data);
+    const keyBuffer = encoder.encode(secretKey);
 
-      const data = await response.json();
-      setCheckhash(data.checkhash);
-    } catch (error) {
+    return crypto.subtle.importKey(
+      'raw', keyBuffer, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+    ).then(key => {
+      return crypto.subtle.sign('HMAC', key, dataBuffer);
+    }).then(signature => {
+      const hashArray = Array.from(new Uint8Array(signature));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }).then(hash => {
+      setCheckhash(hash);
+      console.log(hash);
+    }).catch(error => {
       console.error('Error generating checkhash:', error);
-    }
+    });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    await generateCheckhash();
-    // Now you can submit the form
-    event.currentTarget.submit();
+  // Call the generateCheckhash function when the component mounts
+  React.useEffect(() => {
+    generateCheckhash();
+  }, []);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    // Perform any necessary client-side validation or processing
+    // If validation fails, you can prevent submission:
+    // event.preventDefault();
   };
 
   return (
@@ -149,7 +149,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
               <Form.Control
                 type="url"
                 name="returnurlsuccess"
-                defaultValue="https://lobster-app-9rq3t.ondigitalocean.app/payment/success"
+                defaultValue="http://borgun.is/ReturnPageSuccess"
                 required
               />
             </Form.Group>
@@ -159,7 +159,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
               <Form.Control
                 type="url"
                 name="returnurlsuccessserver"
-                defaultValue="https://lobster-app-9rq3t.ondigitalocean.app/api/payment/success"
+                defaultValue="http://borgun.is/ReturnPageSuccessServer"
                 required
               />
             </Form.Group>
@@ -169,7 +169,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
               <Form.Control
                 type="url"
                 name="returnurlcancel"
-                defaultValue="https://lobster-app-9rq3t.ondigitalocean.app/payment/cancel"
+                defaultValue="http://borgun.is/ReturnPageCancel.aspx"
                 required
               />
             </Form.Group>
@@ -179,7 +179,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
               <Form.Control
                 type="url"
                 name="returnurlerror"
-                defaultValue="https://lobster-app-9rq3t.ondigitalocean.app/payment/error"
+                defaultValue="http://borgun.is/ReturnUrlError.aspx"
                 required
               />
             </Form.Group>
