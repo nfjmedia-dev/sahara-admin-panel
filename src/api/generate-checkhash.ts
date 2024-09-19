@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {

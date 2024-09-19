@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
-const CheckoutPage: React.FC = () => {
+interface Product {
+  name: string;
+  description: string;
+  imageUrl: string;
+  quantity: number;
+}
+
+interface CheckoutPageProps {
+  product: Product;
+}
+
+const CheckoutPage: React.FC<CheckoutPageProps> = ({ product }) => {
   const [checkhash, setCheckhash] = useState('');
 
   const generateCheckhash = async () => {

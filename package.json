@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
+    "next": "^12.0.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
@@ -44,5 +45,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "devDependencies": {
+    "@types/next": "^9.0.0",
+    "@types/react-bootstrap": "^0.32.37"
   }
 }
