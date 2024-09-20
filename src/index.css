@@ -1,13 +1,71 @@
+/* src/index.css */
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.navbar {
+  z-index: 1030; /* Ensure navbar is above offcanvas */
+}
+
+/* .sidebar {
+  position: fixed;
+  top: 60px; 
+  width: 250px;
+  height: calc(100% - 60px);
+  background-color: #f8f9fa;
+} */
+/* Sticky Sidebar */
+.sidebar {
+  width: 250px;
+  min-height: 100vh; /* Full height */
+  position: sticky;
+  top: 0; /* Stick to the top */
+  overflow-y: auto; /* Enable scrolling within the sidebar if necessary */
+  z-index: 1000; /* Ensure it stays above other elements */
+  background-color: #f8f9fa; /* Optional: Background color for the sidebar */
+  padding: 1rem; /* Optional: Padding inside the sidebar */
+}
+
+
+.container {
+  transition: margin-left 0.2s;
+   /* For header space */
+}
+
+/* Adjust main content margin for large screens */
+
+/* Ensure the offcanvas width is consistent */
+.offcanvas {
+  width: 250px; /* Set width for offcanvas */
+}
+
+/* Hide sidebar on small screens */
+@media (max-width: 992px) {
+  .sidebar {
+      display: none; /* Hide sidebar */
+  }
+}
+/* src/styles.css or similar */
+.offcanvas {
+  background-color: #f8f9fa; /* Light background for the off-canvas */
+}
+
+.offcanvas-header {
+  background-color: #343a40; /* Dark header */
+  color: white;
+}
+
+.offcanvas-body {
+  padding: 20px; /* Add some padding */
+}
+
+.btn-link {
+  color: #343a40; /* Customize link color */
+  text-decoration: none; /* Remove underline */
+}
+
+.btn-link:hover {
+  color: #007bff; /* Change color on hover */
 }

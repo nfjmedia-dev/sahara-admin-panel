@@ -1,25 +1,37 @@
+// src/App.tsx
 import React from 'react';
-//import logo from './logo.svg';
-import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SettingsPage from './components/SettingsPage/SettingsPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import CheckoutForm from './components/CheckOutPage/CheckoutPage';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+import UserManagement from './pages/UserManagement';
+import Login from './pages/Login';
+import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute
 
+const App: React.FC = () => {
+    // Show sidebar on all pages except login
 
-function App() {
-  return (
+    return (
+        <Layout >
+            <Routes>
+                {/* Public Route */}
+                <Route path="/login" element={<Login />} />
+                
+                {/* Protected Routes */}
+                <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+                <Route path="/users" element={<PrivateRoute element={<UserManagement />} />} />
+                
+                {/* Redirect to login if path doesn't match */}
+                <Route path="/" element={<Login />} />
+            </Routes>
+        </Layout>
+    );
+};
+
+// Wrap App in Router
+const WrappedApp: React.FC = () => (
     <Router>
-    <div>
-      <h1>My Application</h1>
-      <Routes>
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/checkout" element={<CheckoutForm />} />
-        {/* Add other routes here */}
-      </Routes>
-    </div>
-  </Router>
-  );
-}
+        <App />
+    </Router>
+);
 
-export default App;
+export default WrappedApp;

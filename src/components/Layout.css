@@ -1,0 +1,57 @@
+/* src/components/Layout.css */
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-content {
+    display: block;
+    flex: 1;
+}
+
+.content-area {
+    flex-grow: 1;
+    padding: 20px;
+    overflow: auto;
+}
+
+/* Sidebar for larger screens */
+@media (min-width: 768px) {
+    .sidebar {
+        width: 250px;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        position: fixed;
+        top: 55px;
+        left: 0;
+    }
+
+   
+}
+
+/* Sidebar for larger screens */
+@media (min-width: 992px) {
+    .sidebar {
+        width: 250px;
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        position: fixed;
+        top: 55px;
+        left: 0;
+    }
+
+    .content-area {
+        margin-left: 250px; /* Account for sidebar width */
+    }
+    .login {
+        margin-left:0px!important;
+    }
+}
+/* Adjust padding on smaller screens */
+@media (max-width: 767px) {
+    .content-area {
+        margin-left: 0;
+    }
+    
+}
