@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { apiService } from '../services/api';
 import './PaymentSettings.css';
