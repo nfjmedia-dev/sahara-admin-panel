@@ -1,25 +1,21 @@
 import React from 'react';
-//import logo from './logo.svg';
-import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SettingsPage from './components/SettingsPage/SettingsPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import CheckoutForm from './components/CheckOutPage/CheckoutPage';
+import CheckoutPage from './components/CheckOutPage/CheckoutPage';
+import PaymentSuccess from './components/PaymentSuccess';
+import PaymentCancel from './components/PaymentCancel';
+import PaymentError from './components/PaymentError';
 
-
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
-    <div>
-      <h1>My Application</h1>
       <Routes>
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/checkout" element={<CheckoutForm />} />
-        {/* Add other routes here */}
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancel />} />
+        <Route path="/payment/error" element={<PaymentError />} />
       </Routes>
-    </div>
-  </Router>
+    </Router>
   );
-}
+};
 
 export default App;
