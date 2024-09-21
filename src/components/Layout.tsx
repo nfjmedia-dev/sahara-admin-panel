@@ -20,7 +20,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }, []);
 
     // Conditionally show the sidebar only if the path is NOT '/login'
-    const showSidebar = location.pathname !== '/login';
+    //const showSidebar = location.pathname !== '/login';
+    const showSidebar: boolean = !(location.pathname === '/login' || location.pathname === '/payment-settings');
+
+
 
     return (
         <div className="layout-container">

@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import UserManagement from './pages/UserManagement';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute
+import PaymentSettings from './pages/PaymentSettings';
 
 const App: React.FC = () => {
     // Show sidebar on all pages except login
@@ -19,7 +20,7 @@ const App: React.FC = () => {
                 {/* Protected Routes */}
                 <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
                 <Route path="/users" element={<PrivateRoute element={<UserManagement />} />} />
-                
+                <Route path="/payment-settings" element={<PaymentSettings /> } />
                 {/* Redirect to login if path doesn't match */}
                 <Route path="/" element={<Login />} />
             </Routes>

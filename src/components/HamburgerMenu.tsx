@@ -1,14 +1,8 @@
 // src/components/HamburgerMenu.tsx
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import OffCanvasMenu from './OffCanvasMenu';
+import React from 'react';
+
 
 const HamburgerMenu: React.FC = () => {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     return (
         <>
             {/* <Button variant="primary" onClick={handleShow} className="me-2">

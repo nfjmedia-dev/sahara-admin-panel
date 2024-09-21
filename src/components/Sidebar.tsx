@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../services/authService';
 
 const Sidebar: React.FC = () => {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Sidebar: React.FC = () => {
 
     const handleLogout = () => {
         // Implement your logout logic here
+        logout();
         console.log('Logout clicked');
         // Redirect to login or home after logout
         navigate('/login');
@@ -34,6 +36,15 @@ const Sidebar: React.FC = () => {
                     >
                         <i className="bi bi-person-lines-fill me-2"></i>
                         User Management
+                    </button>
+                </li>
+                <li className="mb-2">
+                    <button
+                        onClick={() => handleNavigation('/payment-settings')}
+                        className="btn btn-link d-flex align-items-center"
+                    >
+                        <i className="bi bi-person-lines-fill me-2"></i>
+                        Payment Management
                     </button>
                 </li>
                 {/* Add more sidebar items as needed */}

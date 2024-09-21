@@ -9,7 +9,11 @@ export const apiService = {
         return response.data;
     },
     create: async (endpoint: string, data: any) => {
+        console.log("endpoint",endpoint)
+        console.log("data",data)
+        console.log("API_URL",`${API_URL}/${endpoint}`)
         const response = await axios.post(`${API_URL}/${endpoint}`, data);
+        console.log(response)
         return response.data;
     },
     update: async (endpoint: string, data: any) => {
