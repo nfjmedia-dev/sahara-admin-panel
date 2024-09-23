@@ -47,6 +47,15 @@ const Sidebar: React.FC = () => {
                         Payment Management
                     </button>
                 </li>
+                <li className="mb-2">
+                    <button
+                        onClick={() => handleNavigation('/checkout')}
+                        className="btn btn-link d-flex align-items-center"
+                    >
+                        <i className="bi bi-person-lines-fill me-2"></i>
+                        Checkout Page
+                    </button>
+                </li>
                 {/* Add more sidebar items as needed */}
                 <li className="mb-2">
                     <button

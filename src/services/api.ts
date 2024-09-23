@@ -8,11 +8,19 @@ export const apiService = {
         const response = await axios.get(`${API_URL}/${endpoint}`);
         return response.data;
     },
+    // create: async (endpoint: string, data: any) => {
+    //     console.log("endpoint",endpoint)
+    //     console.log("data",data)
+    //     console.log("API_URL",`${API_URL}/${endpoint}`)
+    //     const response = await axios.post(`${API_URL}/${endpoint}`, data);
+    //     console.log(response)
+    //     return response.data;
+    // },
     create: async (endpoint: string, data: any) => {
         console.log("endpoint",endpoint)
         console.log("data",data)
-        console.log("API_URL",`${API_URL}/${endpoint}`)
-        const response = await axios.post(`${API_URL}/${endpoint}`, data);
+        console.log("API_URL",`${endpoint}`)
+        const response = await axios.post(`${endpoint}`, data);
         console.log(response)
         return response.data;
     },
