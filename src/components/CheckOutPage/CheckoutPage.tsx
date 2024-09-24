@@ -123,7 +123,7 @@ const CheckoutPage: React.FC = () => {
                 type="text"
                 name="checkhash"
                 value={checkhash}
-                readOnly
+                
               />
             </Form.Group>
 
