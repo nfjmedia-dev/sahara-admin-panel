@@ -125,8 +125,8 @@ const CheckoutPage: React.FC = () => {
     <Form.Control
       type="text"
       name="checkhash"
-      value={checkhash}
-      
+      defaultValue ={checkhash}
+      required
     />
   </Form.Group>
 
