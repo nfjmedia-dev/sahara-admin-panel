@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { apiService } from '../services/api';
 import axios, { AxiosResponse } from 'axios';
 import { useLocation } from 'react-router-dom';
+const API_URL = process.env.REACT_APP_API_URL;
 interface PaymentSession {
   amount: number;
   currency: string;
@@ -44,15 +45,14 @@ const CheckoutPage: React.FC = () => {
     }
   };
   const fetchAccessToken = async (siteName: string): Promise<any> => {
-    const accessTokenUrl = `http://localhost:3000/settings/auth_token?site_name=${siteName}`;
+  
     try {
-      const response:AxiosResponse<accessToken> = await axios.get(accessTokenUrl, {
-      });
-      console.log("response authtoken_____________",response.data.auth_token)
-      if(response.data &&response.data.auth_token){
-        console.log('accessToken retrieved from  API:', response.data.auth_token);
-        setAccessToken({ auth_token: response.data.auth_token }); // Save the payment session data in the state
-        return response.data.auth_token
+     const response = await apiService.get(`settings/auth_token?site_name=${siteName}`);
+      console.log("response authtoken_____________",response.auth_token)
+      if(response &&response.auth_token){
+        console.log('accessToken retrieved from  API:', response.auth_token);
+        setAccessToken({ auth_token: response.auth_token }); // Save the payment session data in the state
+        return response.auth_token
       }
       else {
         console.log('accessToken retrieved failed for the site:', siteName);
