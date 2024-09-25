@@ -2,9 +2,9 @@
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
-const headers = {
+const defaultHeaders = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-    'cache-control': 'no-cache, no-store', 
+    'cache-control': 'no-cache, no-store',
     'content-type': 'application/x-www-form-urlencoded',
     'pragma': 'no-cache',
     'referrer-policy': 'strict-origin',
@@ -26,14 +26,18 @@ export const apiService = {
     //     return response.data;
     // },
     
-    create: async (endpoint: string, data: any) => {
-        console.log("endpoint",endpoint)
-        console.log("data",data)
-        console.log("API_URL",`${endpoint}`)
-        const response = await axios.post(`${endpoint}`, data,{headers});
-        console.log(response)
-        return response.data;
-    },
+    create: async (endpoint: string, data: any, customHeaders = {}) => {
+        try {
+          // Merge custom headers with default headers
+          const headers = { ...defaultHeaders, ...customHeaders };
+          const response = await axios.post(endpoint, data, { headers });
+          console.log('Response:', response);
+          return response.data;
+        } catch (error) {
+          console.error('Error creating data:', error);
+          throw error;
+        }
+      },
     update: async (endpoint: string, data: any) => {
         const response = await axios.put(`${API_URL}/${endpoint}`, data);
         return response.data;

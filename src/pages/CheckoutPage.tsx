@@ -1,11 +1,69 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { apiService } from '../services/api';
+import axios, { AxiosResponse } from 'axios';
+import { useLocation } from 'react-router-dom';
+interface PaymentSession {
+  amount: number;
+  currency: string;
+  status: string;
 
+}
+interface accessToken {
+  auth_token:string
+}
 const CheckoutPage: React.FC = () => {
   const [checkhash, setCheckhash] = useState<string>('');
-
+  const [paymentSession, setPaymentSession] = useState<PaymentSession | null>(null); // Store payment session data
+  const [accessToken, setAccessToken] = useState<accessToken | null>(null); // Store payment session data
+  console.log("paymentSession^^^^^^^^^^^^^^^^^^^^^^^^^",paymentSession)
   // Example product details
+  // Custom hook to get query parameters
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  };
+  const query = useQuery();
+  const sessionId = query.get('session_id'); // Get the session_id parameter
+  const siteName = query.get('site_name'); // Get the site_name parameter
+
+  // Function to fetch payment session data from Duda API
+  const fetchPaymentSessionFromDuda = async (siteName: string, sessionId: string, accessToken: string): Promise<void> => {
+    const dudaUrl = `https://api-sandbox.duda.co/api/integrationhub/application/site/${siteName}/ecommerce/payment-sessions/${sessionId}`;
+    try {
+      const response: AxiosResponse<PaymentSession> = await axios.get(dudaUrl, {
+        headers: {
+          'Authorization': `Basic ${secretKey}`, // Assuming this is the correct credentials setup
+          'X-DUDA-ACCESS-TOKEN': `Bearer ${accessToken}`,
+          'Accept': 'application/json',
+        },
+      });
+      console.log('Payment session retrieved from Duda API:', response.data);
+      setPaymentSession(response.data); // Save the payment session data in the state
+    } catch (error) {
+      console.error('Error fetching payment session from Duda API:', error);
+    }
+  };
+  const fetchAccessToken = async (siteName: string): Promise<any> => {
+    const accessTokenUrl = `http://localhost:3000/settings/auth_token?site_name=${siteName}`;
+    try {
+      const response:AxiosResponse<accessToken> = await axios.get(accessTokenUrl, {
+      });
+      console.log("response authtoken_____________",response.data.auth_token)
+      if(response.data &&response.data.auth_token){
+        console.log('accessToken retrieved from  API:', response.data.auth_token);
+        setAccessToken({ auth_token: response.data.auth_token }); // Save the payment session data in the state
+        return response.data.auth_token
+      }
+      else {
+        console.log('accessToken retrieved failed for the site:', siteName);
+      }
+    } catch (error) {
+      console.error(`accessToken retrieved failed for the site:${siteName}`, error);
+    }
+  };
+
+  
+
   const product = {
     name: 'Product Name',
     description: 'This is a product description.',
@@ -48,11 +106,28 @@ const CheckoutPage: React.FC = () => {
   };
 
   // Call the generateCheckhash function when the component mounts
+  // Call the generateCheckhash function when the component mounts
   React.useEffect(() => {
-    generateCheckhash();
-  }, []);
+    const fetchPaymentSession = async () => {
+      generateCheckhash(); // Generate the hash
+      if (siteName && sessionId) {
+        try {
+          // Fetch the access token and await its response
+          const accessTokenData = await fetchAccessToken(siteName);
+          console.log("accessTokenData_____************",accessTokenData)
+          if (accessTokenData) {
+            // Now fetch the payment session using the token
+            await fetchPaymentSessionFromDuda(siteName, sessionId, accessTokenData);
+          }
+        } catch (error) {
+          console.error('Error fetching access token or payment session:', error);
+        }
+      }
+    };
 
-  // Handle form submission
+    fetchPaymentSession(); // Call the async function
+  }, [siteName, sessionId]); // Dependency array
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
