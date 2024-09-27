@@ -12,7 +12,6 @@ const defaultHeaders = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
   };
 export const apiService = {
-    
     get: async (endpoint: string) => {
         const response = await axios.get(`${API_URL}/${endpoint}`);
         return response.data;
