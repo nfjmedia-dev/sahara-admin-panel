@@ -1,10 +1,10 @@
-// src/components/UserTable.tsx
+// src/components/AppManagementTable.tsx
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Table, Form } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify'; // Import Toast components
 import { apiService } from '../services/api';
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast notifications
-import './UserTable.css';
+import './AppManagementTable.css';
 
 interface User {
     id: number;
@@ -22,7 +22,7 @@ interface User {
     app_plan_uuid: string;
 }
 
-const UserTable: React.FC = () => {
+const AppManagementTable: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showViewModal, setShowViewModal] = useState(false);
@@ -108,7 +108,7 @@ const UserTable: React.FC = () => {
                         <th>Site Name</th>
                         <th>Created At</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th className="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,8 +117,8 @@ const UserTable: React.FC = () => {
                             <td>{user.id}</td>
                             <td>{user.site_name}</td>
                             <td>{new Date(user.created_at).toLocaleString()}</td>
-                            <td>{user.app_status}</td>
-                            <td>
+                            <td >{user.app_status}</td>
+                            <td className="text-end">
                                 <Button variant="info" onClick={() => handleViewUser(user)}>View</Button>
                                 <Button variant="warning" className="ms-2" onClick={() => handleShowEditModal(user)}>Edit</Button>
                                 <Button variant="danger" className="ms-2" onClick={() => handleShowDeleteModal(user.id)}>Delete</Button>
@@ -218,4 +218,4 @@ const UserTable: React.FC = () => {
     );
 };
 
-export default UserTable;
+export default AppManagementTable;

@@ -1,0 +1,36 @@
+/* src/components/UserTable.css */
+.table-container {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 20px; /* Add padding around the table */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.user-table {
+    background-color: #ffffff; /* White background for the table */
+    border: 1px solid #dee2e6; /* Border color */
+}
+
+.user-table th {
+    background-color: #007bff; /* Blue header background */
+    color: white; /* White text color for the header */
+}
+
+.user-table tbody tr:hover {
+    background-color: #f1f1f1; /* Light hover effect for table rows */
+}
+
+.table-container {
+    overflow-x: auto; /* Allow horizontal scrolling */
+}
+
+.user-table {
+    width: 100%;
+    min-width: 600px; /* Ensure table maintains structure even on small screens */
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        padding: 0 15px; /* Add some padding on smaller screens */
+    }
+}

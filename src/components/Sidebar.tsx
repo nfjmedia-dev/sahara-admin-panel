@@ -31,19 +31,19 @@ const Sidebar: React.FC = () => {
                 </li>
                 <li className="mb-2">
                     <button
-                        onClick={() => handleNavigation('/users')}
+                        onClick={() => handleNavigation('/app-management')}
                         className="btn btn-link d-flex align-items-center"
                     >
-                        <i className="bi bi-person-lines-fill me-2"></i>
-                        User Management
+                        <i className="bi bi-grid me-2"></i>
+                        App Management
                     </button>
                 </li>
-                <li className="mb-2">
+                {/* <li className="mb-2">
                     <button
                         onClick={() => handleNavigation('/payment-settings')}
                         className="btn btn-link d-flex align-items-center"
                     >
-                        <i className="bi bi-person-lines-fill me-2"></i>
+                        <i className="bi bi-credit-card me-2"></i>
                         Payment Management
                     </button>
                 </li>
@@ -52,8 +52,17 @@ const Sidebar: React.FC = () => {
                         onClick={() => handleNavigation('/checkout')}
                         className="btn btn-link d-flex align-items-center"
                     >
-                        <i className="bi bi-person-lines-fill me-2"></i>
+                        <i className="bi bi-cart-check me-2"></i>
                         Checkout Page
+                    </button>
+                </li> */}
+                <li className="mb-2">
+                    <button
+                        onClick={() => handleNavigation('/transactions')}
+                        className="btn btn-link d-flex align-items-center"
+                    >
+                        <i className="bi bi-receipt me-2"></i>
+                        Transactions
                     </button>
                 </li>
                 {/* Add more sidebar items as needed */}

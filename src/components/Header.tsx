@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ username, onLogout }) => {
                         alt="Logo"
                         width="100"
                         height="auto"
-                        className="d-inline-block align-top"
+                        className="d-inline-block align-top ms-2"
                     />{' '}
                 </Navbar.Brand>
                 {/* The toggler will now handle showing the off-canvas */}
