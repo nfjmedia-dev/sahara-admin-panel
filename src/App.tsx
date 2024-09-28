@@ -22,8 +22,8 @@ const App: React.FC = () => {
                 <Route path="/dashboard" element={<PrivateRoute element={<AppManagement />} />} />
                
                 <Route path="/app-management" element={<PrivateRoute element={<AppManagement />} />} />
+                <Route path="/transactions" element={<PrivateRoute element={<TransactionTable />} />} />
                 <Route path="/payment-settings" element={<PaymentSettings /> } />
-                <Route path="/transactions" element={<TransactionTable /> } />
                 {/* Redirect to login if path doesn't match */}
                 <Route path="/" element={<Login />} />
             </Routes>
