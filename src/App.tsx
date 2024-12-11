@@ -6,10 +6,12 @@ import PaymentCancel from './components/PaymentCancel';
 import PaymentError from './components/PaymentError';
 
 const App: React.FC = () => {
+  const product = {}; // Define your product object here
+
   return (
     <Router>
       <Routes>
-        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/checkout" element={<CheckoutPage product={product} />} />
         <Route path="/payment/success" element={<PaymentSuccess />} />
         <Route path="/payment/cancel" element={<PaymentCancel />} />
         <Route path="/payment/error" element={<PaymentError />} />

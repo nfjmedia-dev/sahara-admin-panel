@@ -4,7 +4,8 @@ import styles from './SettingsPage/settingsPage.module.css';
 
 const SettingsPage: React.FC = () => {
   const [merchantId, setMerchantId] = useState('');
-  const [apiKey, setApiKey] = useState('');
+  const [gatewayId, setGatewayId] = useState('');
+  const [secretKey, setSecretKey] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,7 +15,7 @@ const SettingsPage: React.FC = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ merchantId, apiKey }),
+      body: JSON.stringify({ merchantId, gatewayId, secretKey }),
     });
 
     if (response.ok) {
@@ -40,12 +41,22 @@ const SettingsPage: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="apiKey">API Key:</label>
+            <label htmlFor="gatewayId">Gateway ID:</label>
             <input
-              id="apiKey"
+              id="gatewayId"
               type="text"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
+              value={gatewayId}
+              onChange={(e) => setGatewayId(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="secretKey">Secret Key:</label>
+            <input
+              id="secretKey"
+              type="text"
+              value={secretKey}
+              onChange={(e) => setSecretKey(e.target.value)}
               required
             />
           </div>
