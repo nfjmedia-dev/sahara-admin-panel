@@ -9,7 +9,7 @@ interface ApiSettingsData {
     site_name: string;
     merchant_id: string;
     payment_id: string;
-    sectret_key: string;
+    secret_key: string;
 }
 
 const PaymentSettings: React.FC = () => {
@@ -19,7 +19,7 @@ const PaymentSettings: React.FC = () => {
         site_name: '',
         merchant_id: '',
         payment_id: '',
-        sectret_key: ''
+        secret_key: ''
     });
 
  
@@ -149,12 +149,12 @@ const PaymentSettings: React.FC = () => {
                                 />
                             </div>
                             <div className="form-group mb-3">
-                                <label htmlFor="sectret_key">Sectret Key</label>
+                                <label htmlFor="secret_key">Sectret Key</label>
                                 <input
-                                    type="sectret_Key"
+                                    type="secret_key"
                                     className="form-control"
-                                    id="sectret_key"
-                                    value={apiSettings.sectret_key}
+                                    id="secret_key"
+                                    value={apiSettings.secret_key}
                                     onChange={handleApiSettingsChange}
                                     required
                                 />
