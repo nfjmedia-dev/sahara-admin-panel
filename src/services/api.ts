@@ -29,7 +29,7 @@ export const apiService = {
         try {
           // Merge custom headers with default headers
           const headers = { ...defaultHeaders, ...customHeaders };
-          const response = await axios.post(endpoint, data, { headers });
+          const response = await axios.post(`${API_URL}/${endpoint}`, data, { headers });
           console.log('Response:', response);
           return response.data;
         } catch (error) {
