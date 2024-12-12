@@ -2,12 +2,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute
-import PaymentSettings from './pages/PaymentSettings';
+//import PaymentSettings from './pages/PaymentSettings';
 import TransactionTable from './pages/TransactionTable';
 import AppManagement from './pages/AppManagement';
+import PaymentGatewaySettings from './pages/PaymentGatewaySettings';
 
 const App: React.FC = () => {
     // Show sidebar on all pages except login
@@ -23,7 +23,8 @@ const App: React.FC = () => {
                
                 <Route path="/app-management" element={<PrivateRoute element={<AppManagement />} />} />
                 <Route path="/transactions" element={<PrivateRoute element={<TransactionTable />} />} />
-                <Route path="/payment-settings" element={<PaymentSettings /> } />
+                {/* <Route path="/payment-settings" element={<PaymentSettings /> } /> */}
+                <Route path="/payment-settings" element={<PaymentGatewaySettings /> } />
                 {/* Redirect to login if path doesn't match */}
                 <Route path="/" element={<Login />} />
             </Routes>
