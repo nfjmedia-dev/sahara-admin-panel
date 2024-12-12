@@ -36,8 +36,6 @@ const PaymentSettings: React.FC = () => {
     const iframeSDKSrc = params.get('iframeSDKSrc');
     const current_user_uuid = params.get('current_user_uuid');
     const secure_sig = params.get('secure_sig');
-    console.log('query param from duda site ****************',params )
-    console.log('query param from duda site_name ****************',site_name )
     // Set site_name in state
     setSiteName(site_name);
 
@@ -121,6 +119,7 @@ const PaymentSettings: React.FC = () => {
                                     id="site_name"
                                     value={apiSettings.site_name}
                                     onChange={handleApiSettingsChange}
+                                    readOnly
                                     required
                                 />
                             </div>
