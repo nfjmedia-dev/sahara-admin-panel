@@ -7,9 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 interface ApiSettingsData {
     site_name: string;
-    merchant_Id: string;
-    payment_Id: string;
-    sectret_Key: string;
+    merchant_id: string;
+    payment_id: string;
+    sectret_key: string;
 }
 
 const PaymentSettings: React.FC = () => {
@@ -17,9 +17,9 @@ const PaymentSettings: React.FC = () => {
     // State for API settings
     const [apiSettings, setApiSettings] = useState<ApiSettingsData>({
         site_name: '',
-        merchant_Id: '',
-        payment_Id: '',
-        sectret_Key: ''
+        merchant_id: '',
+        payment_id: '',
+        sectret_key: ''
     });
 
  
@@ -57,7 +57,7 @@ const PaymentSettings: React.FC = () => {
             try {
                 if(siteName) {
                     console.log('If condtion true for site id *** ',siteName)
-                const apiData: ApiSettingsData = await apiService.get(`paymentGatewaySettings/${siteName}`);
+                const apiData: ApiSettingsData = await apiService.get(`app/get-app-by-site-name/${siteName}`);
                 console.log('Api data from backend paymentGatewaySettings ******************',apiData)
                 setApiSettings(apiData);
                 }
@@ -126,35 +126,35 @@ const PaymentSettings: React.FC = () => {
                             </div>
 
                             <div className="form-group mb-3">
-                                <label htmlFor="merchant_Id">Merchant ID</label>
+                                <label htmlFor="merchant_id">Merchant ID</label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="merchant_Id"
-                                    value={apiSettings.merchant_Id}
+                                    id="merchant_id"
+                                    value={apiSettings.merchant_id}
                                     onChange={handleApiSettingsChange}
                                     required
                                 />
                             </div>
 
                             <div className="form-group mb-3">
-                                <label htmlFor="payment_Id">Payment ID</label>
+                                <label htmlFor="payment_id">Payment ID</label>
                                 <input
-                                    type="payment_Id"
+                                    type="payment_id"
                                     className="form-control"
-                                    id="payment_Id"
-                                    value={apiSettings.payment_Id}
+                                    id="payment_id"
+                                    value={apiSettings.payment_id}
                                     onChange={handleApiSettingsChange}
                                     required
                                 />
                             </div>
                             <div className="form-group mb-3">
-                                <label htmlFor="sectret_Key">Sectret Key</label>
+                                <label htmlFor="sectret_key">Sectret Key</label>
                                 <input
                                     type="sectret_Key"
                                     className="form-control"
-                                    id="sectret_Key"
-                                    value={apiSettings.sectret_Key}
+                                    id="sectret_key"
+                                    value={apiSettings.sectret_key}
                                     onChange={handleApiSettingsChange}
                                     required
                                 />
