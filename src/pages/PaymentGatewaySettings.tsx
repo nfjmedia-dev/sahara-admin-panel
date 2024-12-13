@@ -5,10 +5,11 @@ import './PaymentSettings.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
+
 interface ApiSettingsData {
     site_name: string;
     merchant_id: string;
-    payment_id: string;
+    payment_gateway_id: string;
     secret_key: string;
 }
 
@@ -18,46 +19,43 @@ const PaymentSettings: React.FC = () => {
     const [apiSettings, setApiSettings] = useState<ApiSettingsData>({
         site_name: '',
         merchant_id: '',
-        payment_id: '',
+        payment_gateway_id: '',
         secret_key: ''
     });
 
- 
-
-    const [activeTab, setActiveTab] = useState<'paymentGatewaySetting' >('paymentGatewaySetting'); // Tab state
+    const [activeTab, setActiveTab] = useState<'paymentGatewaySetting'>('paymentGatewaySetting'); // Tab state
     const [siteName, setSiteName] = useState<string>('');
- // Parse query parameters and set to state and localStorage
- useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const site_name = params.get('site_name') || '';
-    const timestamp = params.get('timestamp');
-    const lang = params.get('lang');
-    const is_white_label = params.get('is_white_label');
-    const iframeSDKSrc = params.get('iframeSDKSrc');
-    const current_user_uuid = params.get('current_user_uuid');
-    const secure_sig = params.get('secure_sig');
-    // Set site_name in state
-    setSiteName(site_name);
+    
+    // Parse query parameters and set to state and localStorage
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const site_name = params.get('site_name') || '';
+        const timestamp = params.get('timestamp');
+        const lang = params.get('lang');
+        const is_white_label = params.get('is_white_label');
+        const iframeSDKSrc = params.get('iframeSDKSrc');
+        const current_user_uuid = params.get('current_user_uuid');
+        const secure_sig = params.get('secure_sig');
+        // Set site_name in state
+        setSiteName(site_name);
 
-    // Store parameters in localStorage
-    if (site_name) localStorage.setItem('site_name', site_name);
-    if (timestamp) localStorage.setItem('timestamp', timestamp);
-    if (lang) localStorage.setItem('lang', lang);
-    if (is_white_label) localStorage.setItem('is_white_label', is_white_label);
-    if (iframeSDKSrc) localStorage.setItem('iframeSDKSrc', iframeSDKSrc);
-    if (current_user_uuid) localStorage.setItem('current_user_uuid', current_user_uuid);
-    if (secure_sig) localStorage.setItem('secure_sig', secure_sig);
-}, [location.search]);
+        // Store parameters in localStorage
+        if (site_name) localStorage.setItem('site_name', site_name);
+        if (timestamp) localStorage.setItem('timestamp', timestamp);
+        if (lang) localStorage.setItem('lang', lang);
+        if (is_white_label) localStorage.setItem('is_white_label', is_white_label);
+        if (iframeSDKSrc) localStorage.setItem('iframeSDKSrc', iframeSDKSrc);
+        if (current_user_uuid) localStorage.setItem('current_user_uuid', current_user_uuid);
+        if (secure_sig) localStorage.setItem('secure_sig', secure_sig);
+    }, [location.search]);
 
     // Fetch existing settings on component mount
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                if(siteName) {
-                    console.log('If condtion true for site id *** ',siteName)
-                const apiData: ApiSettingsData = await apiService.get(`app/get-app-by-site-name/${siteName}`);
-                console.log('Api data from backend paymentGatewaySettings ******************',apiData)
-                setApiSettings(apiData);
+                if (siteName) {
+                    const apiData: ApiSettingsData = await apiService.get(`app/get-app-by-site-name/${siteName}`);
+                    setApiSettings(apiData);
                 }
             } catch (error) {
                 console.error("Error fetching settings:", error);
@@ -74,11 +72,16 @@ const PaymentSettings: React.FC = () => {
         setApiSettings((prevState) => ({ ...prevState, [id]: value }));
     };
 
- 
-
     // Handle API settings form submission
     const handleApiSettingsSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        
+        // Check if any required field is missing
+        if (!apiSettings.site_name || !apiSettings.merchant_id || !apiSettings.payment_gateway_id || !apiSettings.secret_key) {
+            toast.error('Please fill all fields.');
+            return;
+        }
+
         try {
             await apiService.create('paymentGatewaySettings', apiSettings);
             toast.success('API Settings saved successfully!');
@@ -87,7 +90,6 @@ const PaymentSettings: React.FC = () => {
             toast.error('Failed to save API Settings.');
         }
     };
-
 
     return (
         <div className="container mt-4">
@@ -102,7 +104,6 @@ const PaymentSettings: React.FC = () => {
                         Payment Gateway Settings
                     </a>
                 </li>
-              
             </ul>
 
             <div className="tab-content mt-4">
@@ -137,20 +138,21 @@ const PaymentSettings: React.FC = () => {
                             </div>
 
                             <div className="form-group mb-3">
-                                <label htmlFor="payment_id">Payment ID</label>
+                                <label htmlFor="payment_gateway_id">Payment Gateway Id</label>
                                 <input
-                                    type="payment_id"
+                                    type="text"
                                     className="form-control"
-                                    id="payment_id"
-                                    value={apiSettings.payment_id}
+                                    id="payment_gateway_id"
+                                    value={apiSettings.payment_gateway_id}
                                     onChange={handleApiSettingsChange}
                                     required
                                 />
                             </div>
+
                             <div className="form-group mb-3">
-                                <label htmlFor="secret_key">Sectret Key</label>
+                                <label htmlFor="secret_key">Secret Key</label>
                                 <input
-                                    type="secret_key"
+                                    type="text"
                                     className="form-control"
                                     id="secret_key"
                                     value={apiSettings.secret_key}
@@ -164,8 +166,9 @@ const PaymentSettings: React.FC = () => {
                     </div>
                 )}
             </div>
-                       {/* Toast Container for Notifications */}
-                       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
+            {/* Toast Container for Notifications */}
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );
 };
