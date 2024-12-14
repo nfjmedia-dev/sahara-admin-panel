@@ -1,6 +1,5 @@
-// src/services/api.ts
-import axios from 'axios';
 
+import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL;
 const defaultHeaders = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -16,15 +15,7 @@ export const apiService = {
         const response = await axios.get(`${API_URL}/${endpoint}`);
         return response.data;
     },
-    // create: async (endpoint: string, data: any) => {
-    //     console.log("endpoint",endpoint)
-    //     console.log("data",data)
-    //     console.log("API_URL",`${API_URL}/${endpoint}`)
-    //     const response = await axios.post(`${API_URL}/${endpoint}`, data);
-    //     console.log(response)
-    //     return response.data;
-    // },
-    
+
     create: async (endpoint: string, data: any, customHeaders = {}) => {
         try {
           // Merge custom headers with default headers

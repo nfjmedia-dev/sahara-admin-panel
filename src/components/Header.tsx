@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Nav, Navbar, Dropdown, Button } from 'react-bootstrap';
+import { Navbar,  } from 'react-bootstrap';
 import OffCanvasMenu from './OffCanvasMenu'; // Assuming you already have OffCanvasMenu component
 
 interface HeaderProps {
