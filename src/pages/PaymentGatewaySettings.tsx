@@ -54,7 +54,7 @@ const PaymentSettings: React.FC = () => {
         const fetchSettings = async () => {
             try {
                 if (siteName) {
-                    const apiData: ApiSettingsData = await apiService.get(`app/get-app-by-site-name/${siteName}`);
+                    const apiData: ApiSettingsData = await apiService.get(`paymentGatewaySettings/${siteName}`);
                     setApiSettings(apiData);
                 }
             } catch (error) {
