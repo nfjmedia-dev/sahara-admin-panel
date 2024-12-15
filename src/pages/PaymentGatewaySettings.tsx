@@ -31,10 +31,8 @@ const PaymentSettings: React.FC = () => {
         try {
             const apiData: ApiSettingsData = await apiService.get(`paymentGatewaySettings/${siteName}`);
             setApiSettings(apiData);
-            toast.success('Settings fetched successfully!');
         } catch (error) {
             console.error('Error fetching settings:', error);
-            toast.error('Failed to fetch settings. Please try again.');
         } finally {
             setLoading(false);
         }
