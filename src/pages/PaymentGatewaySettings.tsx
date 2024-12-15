@@ -29,7 +29,7 @@ const PaymentSettings: React.FC = () => {
     const fetchSettings = useCallback(async (siteName: string) => {
         setLoading(true);
         try {
-            const apiData: ApiSettingsData = await apiService.get(`app/get-app-by-site-name/${siteName}`);
+            const apiData: ApiSettingsData = await apiService.get(`paymentGatewaySettings/${siteName}`);
             setApiSettings(apiData);
             toast.success('Settings fetched successfully!');
         } catch (error) {
