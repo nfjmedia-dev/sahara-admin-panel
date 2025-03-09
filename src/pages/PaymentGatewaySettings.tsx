@@ -10,22 +10,22 @@ interface ApiSettingsData {
     merchant_id: string;
     payment_gateway_id: string;
     secret_key: string;
+    gateway_mode: 'test' | 'live';
 }
 
 const PaymentSettings: React.FC = () => {
     const location = useLocation();
 
-    // State for API settings
     const [apiSettings, setApiSettings] = useState<ApiSettingsData>({
         site_name: '',
         merchant_id: '',
         payment_gateway_id: '',
-        secret_key: ''
+        secret_key: '',
+        gateway_mode: 'live' 
     });
 
-    const [loading, setLoading] = useState<boolean>(false); // Loading state for API call
+    const [loading, setLoading] = useState<boolean>(false);
 
-    // Define fetchSettings function here
     const fetchSettings = useCallback(async (siteName: string) => {
         setLoading(true);
         try {
@@ -36,30 +36,36 @@ const PaymentSettings: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    }, []); // useCallback to prevent unnecessary re-creations
+    }, []);
 
-    // Extract and parse query parameters
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const site_name = params.get('site_name') || '';
 
         if (site_name) {
             setApiSettings((prevState) => ({ ...prevState, site_name }));
-            fetchSettings(site_name); // Call API to fetch settings
+            fetchSettings(site_name);
         } else {
             toast.error('No site_name found in URL!');
         }
-    }, [location.search, fetchSettings]); // Add fetchSettings to dependencies
+    }, [location.search, fetchSettings]);
 
-    // Handle input changes for the form
     const handleApiSettingsChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setApiSettings((prevState) => ({ ...prevState, [id]: value }));
     };
 
-    // Handle form submission
+    const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const isChecked = e.target.checked;
+        setApiSettings((prevState) => ({
+            ...prevState,
+            gateway_mode: isChecked ? 'test' : 'live' 
+        }));
+    };
+
     const handleApiSettingsSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        apiSettings.site_name ="test"
 
         if (!apiSettings.site_name || !apiSettings.merchant_id || !apiSettings.payment_gateway_id || !apiSettings.secret_key) {
             toast.error('Please fill all fields.');
@@ -146,12 +152,25 @@ const PaymentSettings: React.FC = () => {
                             />
                         </div>
 
+                        {/* Toggle Switch with gateway_mode */}
+                        <div className="form-check form-switch mb-3">
+                            <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id="gateway_mode" 
+                                checked={apiSettings.gateway_mode === 'test'} 
+                                onChange={handleCheckboxChange}
+                            />
+                            <label className="form-check-label ms-2" htmlFor="gateway_mode">
+                                Test Gateway Credentials
+                            </label>
+                        </div>
+
                         <button type="submit" className="btn btn-primary w-100">Save API Settings</button>
                     </form>
                 </div>
             )}
 
-            {/* Toast Notifications */}
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );

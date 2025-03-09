@@ -1,4 +1,3 @@
-// src/components/TransactionTable.tsx
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Table, Form } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
@@ -40,8 +39,7 @@ const TransactionTable: React.FC = () => {
 
     useEffect(() => {
         const fetchTransactions = async () => {
-            const data = await apiService.get('transactions'); // Adjust API endpoint as needed
-            console.log("data*******",data)
+            const data = await apiService.get('transactions');
             setTransactions(data);
         };
         fetchTransactions();
@@ -78,7 +76,7 @@ const TransactionTable: React.FC = () => {
     const handleDeleteTransaction = async () => {
         if (transactionIdToDelete) {
             try {
-                await apiService.delete(`transactions/${transactionIdToDelete}`); // Adjust endpoint as needed
+                await apiService.delete(`transactions/${transactionIdToDelete}`);
                 setTransactions(transactions.filter(t => t.transaction_id !== transactionIdToDelete));
                 toast.success('Transaction deleted successfully!');
             } catch (error) {
@@ -107,56 +105,81 @@ const TransactionTable: React.FC = () => {
     };
 
     return (
-        
         <div className="table-container">
-            <h1>Transactions</h1>
-            <Table striped bordered hover className="transaction-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Order ID</th>
-                        <th>Buyer Name</th>
-                        <th>Buyer Email</th>
-                        <th>Transaction Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {transactions.map(transaction => (
-                        <tr key={transaction.transaction_id}>
-                            <td>{transaction.transaction_id}</td>
-                            <td>{transaction.order_id}</td>
-                            <td>{transaction.buyername}</td>
-                            <td>{transaction.buyeremail}</td>
-                            <td>{transaction.amount}</td>
-                            <td>{transaction.transaction_status}</td>
-                            <td>
-                                <Button variant="info" onClick={() => handleViewTransaction(transaction)}>View</Button>
-                                <Button variant="warning" className="ms-2" onClick={() => handleShowEditModal(transaction)}>Edit</Button>
-                                <Button variant="danger" className="ms-2" onClick={() => handleShowDeleteModal(transaction.transaction_id)}>Delete</Button>
-                            </td>
+            <h1 className="table-title">Transactions</h1>
+            <div className="table-wrapper">
+                <Table striped bordered hover responsive className="transaction-table shadow-sm">
+                    <thead className="table-header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Order ID</th>
+                            <th>Buyer Name</th>
+                            <th>Buyer Email</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {transactions.map(transaction => (
+                            <tr key={transaction.transaction_id} className="table-row">
+                                <td>{transaction.transaction_id}</td>
+                                <td>{transaction.order_id}</td>
+                                <td>{transaction.buyername}</td>
+                                <td>{transaction.buyeremail}</td>
+                                <td>{transaction.amount}</td>
+                                <td>
+                                    <span className={`status-badge status-${transaction.transaction_status.toLowerCase()}`}>
+                                        {transaction.transaction_status}
+                                    </span>
+                                </td>
+                                <td className="action-buttons">
+                                    <Button 
+                                        variant="outline-info" 
+                                        size="sm" 
+                                        onClick={() => handleViewTransaction(transaction)}
+                                        className="me-2"
+                                    >
+                                        View
+                                    </Button>
+                                    <Button 
+                                        variant="outline-warning" 
+                                        size="sm" 
+                                        onClick={() => handleShowEditModal(transaction)}
+                                        className="me-2"
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button 
+                                        variant="outline-danger" 
+                                        size="sm" 
+                                        onClick={() => handleShowDeleteModal(transaction.transaction_id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </div>
 
             {/* View Transaction Modal */}
             {selectedTransaction && (
-                <Modal show={showViewModal} onHide={handleCloseViewModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>View Transaction</Modal.Title>
+                <Modal show={showViewModal} onHide={handleCloseViewModal} centered>
+                    <Modal.Header closeButton className="modal-header-custom">
+                        <Modal.Title>Transaction Details</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <p><strong>ID:</strong> {selectedTransaction.transaction_id}</p>
                         <p><strong>Order ID:</strong> {selectedTransaction.order_id}</p>
-                        <p><strong>Transaction Amount:</strong> {selectedTransaction.amount}</p>
+                        <p><strong>Amount:</strong> {selectedTransaction.amount}</p>
                         <p><strong>Buyer Name:</strong> {selectedTransaction.buyername}</p>
                         <p><strong>Buyer Email:</strong> {selectedTransaction.buyeremail}</p>
                         <p><strong>Status:</strong> {selectedTransaction.transaction_status}</p>
-                        <p><strong>Transaction Date:</strong> {new Date(selectedTransaction.transaction_date).toLocaleString()}</p>
-                        <p><strong>Created At:</strong> {new Date(selectedTransaction.created_at).toLocaleString()}</p>
-                        <p><strong>Updated At:</strong> {new Date(selectedTransaction.updated_at).toLocaleString()}</p>
+                        <p><strong>Date:</strong> {new Date(selectedTransaction.transaction_date).toLocaleString()}</p>
+                        <p><strong>Created:</strong> {new Date(selectedTransaction.created_at).toLocaleString()}</p>
+                        <p><strong>Updated:</strong> {new Date(selectedTransaction.updated_at).toLocaleString()}</p>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleCloseViewModal}>Close</Button>
@@ -165,8 +188,8 @@ const TransactionTable: React.FC = () => {
             )}
 
             {/* Delete Confirmation Modal */}
-            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
-                <Modal.Header closeButton>
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
+                <Modal.Header closeButton className="modal-header-custom">
                     <Modal.Title>Confirm Deletion</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Are you sure you want to delete this transaction?</Modal.Body>
@@ -177,23 +200,23 @@ const TransactionTable: React.FC = () => {
             </Modal>
 
             {/* Edit Transaction Modal */}
-            <Modal show={showEditModal} onHide={handleCloseEditModal}>
-                <Modal.Header closeButton>
+            <Modal show={showEditModal} onHide={handleCloseEditModal} centered>
+                <Modal.Header closeButton className="modal-header-custom">
                     <Modal.Title>Edit Transaction</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group controlId="formTransactionAmount">
+                        <Form.Group controlId="formTransactionAmount" className="mb-3">
                             <Form.Label>Transaction Amount</Form.Label>
                             <Form.Control
                                 type="number"
-                                name="transaction_amount"
+                                name="amount"
                                 value={formData.amount || ''}
                                 onChange={handleChange}
                                 placeholder="Enter transaction amount"
                             />
                         </Form.Group>
-                        <Form.Group controlId="formTransactionStatus">
+                        <Form.Group controlId="formTransactionStatus" className="mb-3">
                             <Form.Label>Transaction Status</Form.Label>
                             <Form.Control
                                 as="select"
@@ -215,7 +238,6 @@ const TransactionTable: React.FC = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Toast Container for Notifications */}
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );

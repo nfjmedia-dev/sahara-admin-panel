@@ -1,9 +1,8 @@
-// src/components/AppManagementTable.tsx
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Table, Form } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify'; // Import Toast components
+import { ToastContainer, toast } from 'react-toastify';
 import { apiService } from '../services/api';
-import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast notifications
+import 'react-toastify/dist/ReactToastify.css';
 import './AppManagementTable.css';
 
 interface User {
@@ -33,7 +32,7 @@ const AppManagementTable: React.FC = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const data = await apiService.get('app/getapps');
+            const data = await apiService.get('app/getAllApps');
             setUsers(data);
         };
         fetchUsers();
@@ -73,9 +72,9 @@ const AppManagementTable: React.FC = () => {
             try {
                 await apiService.delete(`app/deleteapp/${userIdToDelete}`);
                 setUsers(users.filter(u => u.id !== userIdToDelete));
-                toast.success('User deleted successfully!'); // Display success toast
+                toast.success('User deleted successfully!');
             } catch (error) {
-                toast.error('Failed to delete user.'); // Display error toast
+                toast.error('Failed to delete user.');
             }
             handleCloseDeleteModal();
         }
@@ -86,9 +85,9 @@ const AppManagementTable: React.FC = () => {
             try {
                 const updatedUser = await apiService.update(`app/update/app`, { ...selectedUser, ...formData });
                 setUsers(users.map(u => (u.id === updatedUser.id ? updatedUser : u)));
-                toast.success('User updated successfully!'); // Display success toast
+                toast.success('User updated successfully!');
             } catch (error) {
-                toast.error('Failed to update user.'); // Display error toast
+                toast.error('Failed to update user.');
             }
             handleCloseEditModal();
         }
@@ -101,38 +100,65 @@ const AppManagementTable: React.FC = () => {
 
     return (
         <div className="table-container">
-            <Table striped bordered hover className="user-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Site Name</th>
-                        <th>Created At</th>
-                        <th>Status</th>
-                        <th className="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(user => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.site_name}</td>
-                            <td>{new Date(user.created_at).toLocaleString()}</td>
-                            <td >{user.app_status}</td>
-                            <td className="text-end">
-                                <Button variant="info" onClick={() => handleViewUser(user)}>View</Button>
-                                <Button variant="warning" className="ms-2" onClick={() => handleShowEditModal(user)}>Edit</Button>
-                                <Button variant="danger" className="ms-2" onClick={() => handleShowDeleteModal(user.id)}>Delete</Button>
-                            </td>
+            <h3 className="table-title">App Management</h3>
+            <div className="table-wrapper">
+                <Table striped bordered hover responsive className="user-table shadow-sm">
+                    <thead className="table-header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Site Name</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                            <th className="text-end">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody className="table-body">
+                        {users.map(user => (
+                            <tr key={user.id} className="table-row">
+                                <td>{user.id}</td>
+                                <td>{user.site_name}</td>
+                                <td>{new Date(user.created_at).toLocaleString()}</td>
+                                <td>
+                                    <span className={`status-badge status-${user.app_status.toLowerCase()}`}>
+                                        {user.app_status}
+                                    </span>
+                                </td>
+                                <td className="action-buttons text-end">
+                                    <Button 
+                                        variant="outline-info" 
+                                        size="sm" 
+                                        onClick={() => handleViewUser(user)}
+                                        className="me-2"
+                                    >
+                                        View
+                                    </Button>
+                                    <Button 
+                                        variant="outline-warning" 
+                                        size="sm" 
+                                        onClick={() => handleShowEditModal(user)}
+                                        className="me-2"
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button 
+                                        variant="outline-danger" 
+                                        size="sm" 
+                                        onClick={() => handleShowDeleteModal(user.id)}
+                                    >
+                                        Delete
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </div>
 
             {/* View User Modal */}
             {selectedUser && (
-                <Modal show={showViewModal} onHide={handleCloseViewModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>View User</Modal.Title>
+                <Modal show={showViewModal} onHide={handleCloseViewModal} centered>
+                    <Modal.Header closeButton className="modal-header-custom">
+                        <Modal.Title>App Details</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <p><strong>ID:</strong> {selectedUser.id}</p>
@@ -153,11 +179,11 @@ const AppManagementTable: React.FC = () => {
             )}
 
             {/* Delete Confirmation Modal */}
-            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
-                <Modal.Header closeButton>
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
+                <Modal.Header closeButton className="modal-header-custom">
                     <Modal.Title>Confirm Deletion</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this app?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseDeleteModal}>Cancel</Button>
                     <Button variant="danger" onClick={handleDeleteUser}>Delete</Button>
@@ -165,13 +191,13 @@ const AppManagementTable: React.FC = () => {
             </Modal>
 
             {/* Edit User Modal */}
-            <Modal show={showEditModal} onHide={handleCloseEditModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit User</Modal.Title>
+            <Modal show={showEditModal} onHide={handleCloseEditModal} centered>
+                <Modal.Header closeButton className="modal-header-custom">
+                    <Modal.Title>Edit App</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group controlId="formSiteName">
+                        <Form.Group controlId="formSiteName" className="mb-3">
                             <Form.Label>Site Name</Form.Label>
                             <Form.Control
                                 type="text"
@@ -181,7 +207,7 @@ const AppManagementTable: React.FC = () => {
                                 placeholder="Enter site name"
                             />
                         </Form.Group>
-                        <Form.Group controlId="formSiteURL">
+                        <Form.Group controlId="formSiteURL" className="mb-3">
                             <Form.Label>Site URL</Form.Label>
                             <Form.Control
                                 type="text"
@@ -191,7 +217,7 @@ const AppManagementTable: React.FC = () => {
                                 placeholder="Enter site URL"
                             />
                         </Form.Group>
-                        <Form.Group controlId="formAppStatus">
+                        <Form.Group controlId="formAppStatus" className="mb-3">
                             <Form.Label>App Status</Form.Label>
                             <Form.Control
                                 as="select"
@@ -200,8 +226,8 @@ const AppManagementTable: React.FC = () => {
                                 onChange={handleChange}
                             >
                                 <option value="">Select status</option>
-                                <option value="installed">Install</option>
-                                <option value="uninstalled">Uninstall</option>
+                                <option value="installed">Installed</option>
+                                <option value="uninstalled">Uninstalled</option>
                             </Form.Control>
                         </Form.Group>
                     </Form>
@@ -212,7 +238,6 @@ const AppManagementTable: React.FC = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Toast Container for Notifications */}
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
     );

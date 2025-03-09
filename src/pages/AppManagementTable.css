@@ -1,36 +1,139 @@
-/* src/components/UserTable.css */
+/* General container styling */
 .table-container {
-    background-color: #f8f9fa; /* Light gray background */
-    padding: 20px; /* Add padding around the table */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 20px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-.user-table {
-    background-color: #ffffff; /* White background for the table */
-    border: 1px solid #dee2e6; /* Border color */
+/* Title styling */
+.table-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.user-table th {
-    background-color: #007bff; /* Blue header background */
-    color: white; /* White text color for the header */
+/* Wrapper for table with fixed height and scrolling */
+.table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px; /* Set a fixed height for the table */
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.user-table tbody tr:hover {
-    background-color: #f1f1f1; /* Light hover effect for table rows */
-}
-
-.table-container {
-    overflow-x: auto; /* Allow horizontal scrolling */
-}
-
+/* Table styling */
 .user-table {
     width: 100%;
-    min-width: 600px; /* Ensure table maintains structure even on small screens */
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.95rem;
 }
 
+.user-table th, 
+.user-table td {
+    vertical-align: middle;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.table-header {
+    background-color: #007bff;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    position: sticky; /* Keep header fixed at the top */
+    top: 0;
+    z-index: 1;
+}
+
+/* Table body with scrolling */
+.table-body {
+    overflow-y: auto; /* Enable vertical scrolling for tbody */
+}
+
+/* Row hover effect */
+.table-row:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+/* Status badge styling */
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-installed {
+    background-color: #28a745; /* Green background for "installed" status */
+    color: #fff;
+}
+
+.status-uninstalled {
+    background-color: #dc3545; /* Red background for "uninstalled" status */
+    color: #fff;
+}
+
+/* Action buttons styling */
+.action-buttons .btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .btn:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal header styling */
+.modal-header-custom {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: none;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
+    .user-table th, 
+    .user-table td {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
+
+    .action-buttons .btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .table-title {
+        font-size: 1.5rem;
+    }
+
+    .table-wrapper {
+        max-height: 400px; /* Reduce height on smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .user-table th, 
+    .user-table td {
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+
     .table-container {
-        padding: 0 15px; /* Add some padding on smaller screens */
+        padding: 10px;
+    }
+
+    .table-wrapper {
+        max-height: 300px; /* Further reduce height on very small screens */
     }
 }
