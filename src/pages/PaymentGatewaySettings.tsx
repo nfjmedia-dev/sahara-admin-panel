@@ -3,7 +3,7 @@ import { apiService } from '../services/api';
 import './PaymentSettings.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ApiSettingsData {
     site_name: string;
@@ -15,13 +15,14 @@ interface ApiSettingsData {
 
 const PaymentSettings: React.FC = () => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [apiSettings, setApiSettings] = useState<ApiSettingsData>({
         site_name: '',
         merchant_id: '',
         payment_gateway_id: '',
         secret_key: '',
-        gateway_mode: 'live' 
+        gateway_mode: 'live'
     });
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -30,25 +31,49 @@ const PaymentSettings: React.FC = () => {
         setLoading(true);
         try {
             const apiData: ApiSettingsData = await apiService.get(`paymentGatewaySettings/${siteName}`);
-            setApiSettings(apiData);
+            setApiSettings(apiData || {
+                site_name: siteName,
+                merchant_id: '',
+                payment_gateway_id: '',
+                secret_key: '',
+                gateway_mode: 'live'
+            });
         } catch (error) {
             console.error('Error fetching settings:', error);
+            setApiSettings({
+                site_name: siteName,
+                merchant_id: '',
+                payment_gateway_id: '',
+                secret_key: '',
+                gateway_mode: 'live'
+            });
         } finally {
             setLoading(false);
         }
     }, []);
 
+    // Function to extract site_name from URL path
+    const extractSiteNameFromPath = (pathname: string): string => {
+        const parts = pathname.split('/'); // Split URL path by '/'
+        const siteIndex = parts.indexOf('site');
+        if (siteIndex !== -1 && siteIndex + 1 < parts.length) {
+            return parts[siteIndex + 1]; // Return the segment after 'site'
+        }
+        return '';
+    };
+
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const site_name = params.get('site_name') || '';
+        const site_name = extractSiteNameFromPath(location.pathname);
 
         if (site_name) {
             setApiSettings((prevState) => ({ ...prevState, site_name }));
             fetchSettings(site_name);
         } else {
-            toast.error('No site_name found in URL!');
+            toast.error('Site name is mandatory in the URL!');
+            // Optionally redirect to an error page or home
+            navigate('/'); // Redirect to home or an error page if site_name is missing
         }
-    }, [location.search, fetchSettings]);
+    }, [location.pathname, fetchSettings, navigate]);
 
     const handleApiSettingsChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -59,16 +84,15 @@ const PaymentSettings: React.FC = () => {
         const isChecked = e.target.checked;
         setApiSettings((prevState) => ({
             ...prevState,
-            gateway_mode: isChecked ? 'test' : 'live' 
+            gateway_mode: isChecked ? 'test' : 'live'
         }));
     };
 
     const handleApiSettingsSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        apiSettings.site_name ="test"
 
-        if (!apiSettings.site_name || !apiSettings.merchant_id || !apiSettings.payment_gateway_id || !apiSettings.secret_key) {
-            toast.error('Please fill all fields.');
+        if (!apiSettings.merchant_id || !apiSettings.payment_gateway_id || !apiSettings.secret_key) {
+            toast.error('Please fill all fields except Site Name.');
             return;
         }
 
@@ -83,7 +107,6 @@ const PaymentSettings: React.FC = () => {
 
     return (
         <div className="container mt-4">
-            {/* Display a loader while fetching settings */}
             {loading ? (
                 <div className="text-center">
                     <div className="spinner-border text-primary" role="status">
@@ -96,7 +119,7 @@ const PaymentSettings: React.FC = () => {
                     <div
                         className="mb-3 pb-2"
                         style={{
-                            borderBottom: "2px solid #007bff", // Primary blue border
+                            borderBottom: "2px solid #007bff",
                             marginBottom: "1rem"
                         }}
                     >
@@ -152,13 +175,12 @@ const PaymentSettings: React.FC = () => {
                             />
                         </div>
 
-                        {/* Toggle Switch with gateway_mode */}
                         <div className="form-check form-switch mb-3">
                             <input
                                 type="checkbox"
                                 className="form-check-input"
-                                id="gateway_mode" 
-                                checked={apiSettings.gateway_mode === 'test'} 
+                                id="gateway_mode"
+                                checked={apiSettings.gateway_mode === 'test'}
                                 onChange={handleCheckboxChange}
                             />
                             <label className="form-check-label ms-2" htmlFor="gateway_mode">
