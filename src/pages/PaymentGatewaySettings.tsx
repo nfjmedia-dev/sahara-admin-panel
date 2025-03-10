@@ -3,7 +3,7 @@ import { apiService } from '../services/api';
 import './PaymentSettings.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface ApiSettingsData {
     site_name: string;
@@ -15,7 +15,6 @@ interface ApiSettingsData {
 
 const PaymentSettings: React.FC = () => {
     const location = useLocation();
-    const navigate = useNavigate();
 
     const [apiSettings, setApiSettings] = useState<ApiSettingsData>({
         site_name: '',
@@ -52,28 +51,25 @@ const PaymentSettings: React.FC = () => {
         }
     }, []);
 
-    // Function to extract site_name from URL path
-    const extractSiteNameFromPath = (pathname: string): string => {
-        const parts = pathname.split('/'); // Split URL path by '/'
-        const siteIndex = parts.indexOf('site');
-        if (siteIndex !== -1 && siteIndex + 1 < parts.length) {
-            return parts[siteIndex + 1]; // Return the segment after 'site'
-        }
-        return '';
-    };
-
     useEffect(() => {
-        const site_name = extractSiteNameFromPath(location.pathname);
+        const params = new URLSearchParams(location.search);
+        const site_name = params.get('site_name') || '';
 
         if (site_name) {
             setApiSettings((prevState) => ({ ...prevState, site_name }));
             fetchSettings(site_name);
         } else {
             toast.error('Site name is mandatory in the URL!');
-            // Optionally redirect to an error page or home
-            navigate('/'); // Redirect to home or an error page if site_name is missing
+            // No redirect, just leave the form with empty fields
+            setApiSettings({
+                site_name: '',
+                merchant_id: '',
+                payment_gateway_id: '',
+                secret_key: '',
+                gateway_mode: 'live'
+            });
         }
-    }, [location.pathname, fetchSettings, navigate]);
+    }, [location.search, fetchSettings]);
 
     const handleApiSettingsChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -90,6 +86,11 @@ const PaymentSettings: React.FC = () => {
 
     const handleApiSettingsSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        if (!apiSettings.site_name) {
+            toast.error('Site name is required from URL!');
+            return;
+        }
 
         if (!apiSettings.merchant_id || !apiSettings.payment_gateway_id || !apiSettings.secret_key) {
             toast.error('Please fill all fields except Site Name.');
