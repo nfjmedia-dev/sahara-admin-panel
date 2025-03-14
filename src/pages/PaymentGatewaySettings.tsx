@@ -56,11 +56,12 @@ const PaymentSettings: React.FC = () => {
         const site_name = params.get('site_name') || '';
 
         if (site_name) {
+            console.log("site_name*******",site_name)
             setApiSettings((prevState) => ({ ...prevState, site_name }));
-            fetchSettings(site_name);
+            fetchSettings(site_name); 
         } else {
             toast.error('Site name is mandatory in the URL!');
-            // No redirect, just leave the form with empty fields
+
             setApiSettings({
                 site_name: '',
                 merchant_id: '',

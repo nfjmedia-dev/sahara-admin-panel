@@ -4,6 +4,7 @@ import { apiService } from '../services/api';
 import axios, { AxiosResponse } from 'axios';
 import { useLocation } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_API_URL;
+const DUDA_API_URL = process.env.DUDA_API_URL;
 interface PaymentSession {
   amount: number;
   currency: string;
@@ -29,7 +30,7 @@ const CheckoutPage: React.FC = () => {
 
   // Function to fetch payment session data from Duda API
   const fetchPaymentSessionFromDuda = async (siteName: string, sessionId: string, accessToken: string): Promise<void> => {
-    const dudaUrl = `https://api-sandbox.duda.co/api/integrationhub/application/site/${siteName}/ecommerce/payment-sessions/${sessionId}`;
+    const dudaUrl = `${DUDA_API_URL}/site/${siteName}/ecommerce/payment-sessions/${sessionId}`;
     try {
       const response: AxiosResponse<PaymentSession> = await axios.get(dudaUrl, {
         headers: {
